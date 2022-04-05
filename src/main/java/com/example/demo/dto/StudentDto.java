@@ -13,6 +13,7 @@ public class StudentDto {
 
     private Long studentId;
     private Long courseId;
+    private String courseName;
     private String lastName;
     private String firstName;
     private String studentNumber;

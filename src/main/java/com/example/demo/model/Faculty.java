@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -22,6 +23,6 @@ public class Faculty {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToOne(mappedBy = "faculty", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Course course;
+    @OneToMany(mappedBy = "faculty", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Course> courses;
 }

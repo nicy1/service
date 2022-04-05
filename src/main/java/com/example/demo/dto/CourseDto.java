@@ -14,8 +14,9 @@ import java.util.Date;
 public class CourseDto {
 
     private Long id;
-    private Long facultyId;
     private String name;
+    private Long facultyId;
+    private String facultyName;
     private String professorName;
     private Date startDate;
 }

@@ -17,10 +17,12 @@ public interface Mappers {
 
     @Mapping(target = "professorName", source = "professor")
     @Mapping(target = "facultyId", source = "faculty.id")
+    @Mapping(target = "facultyName", source = "faculty.name")
     CourseDto map(Course course);
 
     @Mapping(target = "studentId", source = "id")
     @Mapping(target = "courseId", source = "course.id")
+    @Mapping(target = "courseName", source = "course.name")
     StudentDto map(Student student);
 
     FacultyDto map(Faculty faculty);

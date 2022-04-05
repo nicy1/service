@@ -24,8 +24,8 @@ public class Course {
     @Column(nullable = false)
     private String professor;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @ManyToOne(fetch = FetchType.LAZY)
+    /// @MapsId: important in case of @OneToOne (Uniqueness management)
     private Faculty faculty;
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
