@@ -105,7 +105,7 @@ public class StudentController {
     }
 
 
-    @DeleteMapping(path = "/{studentId}")
+    @DeleteMapping(path = "/{courseId}/students/{studentId}")
     @Operation(
             summary = "Delete a student",
             responses = {
@@ -113,7 +113,7 @@ public class StudentController {
                     @ApiResponse(description = "Student not found", responseCode = "404", content = {}),
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
-    public ResponseEntity<Void> deleteStudent(@PathVariable("studentId") Long studentId) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable("courseId") Long courseId, @PathVariable("studentId") Long studentId) {
         studentService.deleteStudent(studentId);
         return ResponseEntity.ok().build();
     }
