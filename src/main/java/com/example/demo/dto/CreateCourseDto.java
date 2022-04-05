@@ -16,16 +16,16 @@ import java.util.Date;
 @Accessors(chain = true)
 public class CreateCourseDto {
 
-    @NotNull(message = "{constraints.NotNull.message}")
+    @NotNull
     private Long facultyId;
 
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @NotEmpty
     private String name;
 
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @NotEmpty
     private String professorName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    @NotNull(message = "{constraints.NotNull.message}")
+    @NotNull
     private Date startDate;
 }

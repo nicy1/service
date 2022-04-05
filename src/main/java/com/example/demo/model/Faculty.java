@@ -22,6 +22,6 @@ public class Faculty {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToOne(mappedBy = "faculty")
+    @OneToOne(mappedBy = "faculty", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Course course;
 }

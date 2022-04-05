@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateStudentDto;
 import com.example.demo.dto.StudentDto;
-import com.example.demo.exception.UniqueConstraintViolationException;
+import com.example.demo.dto.UpdateStudentDto;
 import com.example.demo.model.Student;
 import com.example.demo.service.StudentService;
 import com.example.demo.util.Mappers;
@@ -27,14 +27,14 @@ import java.net.URI;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/courses/{courseId}/students")
+@RequestMapping(path = "/courses")
 public class StudentController {
 
     private final StudentService studentService;
     private final Mappers mapper;
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{courseId}/students", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Create a student",
             responses = {
@@ -43,20 +43,17 @@ public class StudentController {
                     @ApiResponse(description = "Bad request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
-    public ResponseEntity<String> createStudent(@RequestBody @Valid CreateStudentDto request) {
-
-        if (studentService.existsByStudentNumber(request.getStudentNumber())) {
-            throw new UniqueConstraintViolationException(Student.class.getName(), request.getStudentNumber());
-        }
+    public ResponseEntity<String> createStudent(@PathVariable("courseId") Long courseId,
+                                                @RequestBody @Valid CreateStudentDto request) {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{studentId}")
-                .buildAndExpand(studentService.createStudent(request)).toUri();
+                .buildAndExpand(studentService.createStudent(courseId, request)).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
 
-    @GetMapping(path = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{courseId}/students/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Get a student",
             responses = {
@@ -64,21 +61,23 @@ public class StudentController {
                     @ApiResponse(description = "Student not found", responseCode = "404", content = {}),
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
-    public ResponseEntity<StudentDto> getStudent(@PathVariable("studentId") Long studentId) {
+    public ResponseEntity<StudentDto> getStudent(@PathVariable("courseId") Long courseId,
+                                                 @PathVariable("studentId") Long studentId) {
         return studentService.getStudent(studentId)
                 .map(student -> ResponseEntity.ok().body(mapper.map(student)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{courseId}/students", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Fetch students parametrized",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200", content = @Content(schema = @Schema(implementation = Page.class))),
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
-    public ResponseEntity<Page<StudentDto>> getStudents(@RequestParam(required = false) String lastName,
+    public ResponseEntity<Page<StudentDto>> getStudents(@PathVariable("courseId") Long courseId,
+                                                        @RequestParam(required = false) String lastName,
                                                         @RequestParam(required = false) String firstName,
                                                         @RequestParam(required = false) String gender,
                                                         @RequestParam(required = false, defaultValue = "0") Integer offset,
@@ -89,7 +88,7 @@ public class StudentController {
     }
 
 
-    @PutMapping(path = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{courseId}/students/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Update a student",
             responses = {
@@ -98,7 +97,9 @@ public class StudentController {
                     @ApiResponse(description = "Conflict", responseCode = "409", content = @Content),
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
-    public ResponseEntity<Void> updateStudent(@PathVariable("studentId") Long studentId, @RequestBody StudentDto newData) {
+    public ResponseEntity<Void> updateStudent(@PathVariable("courseId") Long courseId,
+                                              @PathVariable("studentId") Long studentId,
+                                              @RequestBody UpdateStudentDto newData) {
         studentService.updateStudent(studentId, newData);
         return ResponseEntity.ok().build();
     }

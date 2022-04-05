@@ -8,8 +8,8 @@ public class UniqueConstraintViolationException extends RuntimeException {
     private final String message;
     private final String fieldName;
 
-    public UniqueConstraintViolationException(String className, String fieldName) {
+    public UniqueConstraintViolationException(String className, String fieldName, String fieldValue) {
         this.fieldName = fieldName;
-        this.message = String.format("Resource %s with id %s already exists.", className, fieldName);
+        this.message = String.format("Resource %s with id %s already exists.", className, fieldValue);
     }
 }

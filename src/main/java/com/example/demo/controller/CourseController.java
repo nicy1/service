@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CourseDto;
 import com.example.demo.dto.CreateCourseDto;
-import com.example.demo.exception.UniqueConstraintViolationException;
+import com.example.demo.dto.UpdateCourseDto;
 import com.example.demo.model.Course;
 import com.example.demo.service.CourseService;
 import com.example.demo.util.Mappers;
@@ -45,11 +45,6 @@ public class CourseController {
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
     public ResponseEntity<String> createCourse(@RequestBody @Valid CreateCourseDto request) {
-
-        if (courseService.existsByName(request.getName())) {
-            throw new UniqueConstraintViolationException(Course.class.getName(), request.getName());
-        }
-
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{courseId}")
                 .buildAndExpand(courseService.createCourse(request)).toUri();
 
@@ -100,7 +95,7 @@ public class CourseController {
                     @ApiResponse(description = "Conflict", responseCode = "409", content = @Content),
                     @ApiResponse(description = "Internal server error", responseCode = "500", content = @Content)}
     )
-    public ResponseEntity<Void> updateCourse(@PathVariable("courseId") Long courseId, @RequestBody CourseDto newData) {
+    public ResponseEntity<Void> updateCourse(@PathVariable("courseId") Long courseId, @RequestBody UpdateCourseDto newData) {
         courseService.updateCourse(courseId, newData);
         return ResponseEntity.ok().build();
     }

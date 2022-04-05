@@ -24,7 +24,8 @@ public class Course {
     @Column(nullable = false)
     private String professor;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     private Faculty faculty;
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)

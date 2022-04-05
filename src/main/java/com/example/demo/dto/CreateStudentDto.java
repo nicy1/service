@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -15,19 +14,16 @@ import javax.validation.constraints.NotNull;
 @Accessors(chain = true)
 public class CreateStudentDto {
 
-    @NotNull(message = "{constraints.NotNull.message}")
-    private Long courseId;
-
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @NotEmpty
     private String lastName;
 
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @NotEmpty
     private String firstName;
 
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @NotEmpty
     private String studentNumber;
 
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @NotEmpty
     @ValidGender
     private String gender;
 }

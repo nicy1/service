@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.CreateStudentDto;
 import com.example.demo.dto.StudentDto;
+import com.example.demo.dto.UpdateStudentDto;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.UniqueConstraintViolationException;
 import com.example.demo.model.Course;
@@ -9,6 +10,7 @@ import com.example.demo.model.Student;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.StudentService;
+import com.example.demo.util.ErrorCode;
 import com.example.demo.util.Gender;
 import com.example.demo.util.Mappers;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +34,14 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Long createStudent(CreateStudentDto request) {
-        Course course = courseRepo.findById(request.getCourseId())
-                .orElseThrow(() -> new ResourceNotFoundException(Course.class.getName(), request.getCourseId().toString()));
+    public Long createStudent(Long courseId, CreateStudentDto request) {
+
+        if (this.existsByStudentNumber(request.getStudentNumber())) {
+            throw new UniqueConstraintViolationException(Student.class.getName(), ErrorCode.STUDENTNUMBER.name(), request.getStudentNumber());
+        }
+
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException(Course.class.getName(), courseId.toString()));
 
         Student student = mapper.map(request);
         student.setCourse(course);
@@ -67,17 +74,17 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void updateStudent(Long studentId, StudentDto newData) {
+    public void updateStudent(Long studentId, UpdateStudentDto newData) {
         this.getStudent(studentId)
                 .map(student -> this.update(student, newData))
                 .orElseThrow(() -> new ResourceNotFoundException(Student.class.getName(), studentId.toString()));
     }
 
-    private Student update(Student student, StudentDto newStudent) {
+    private Student update(Student student, UpdateStudentDto newStudent) {
         if (newStudent.getStudentNumber() != null) {
 
             if (this.existsByStudentNumber(newStudent.getStudentNumber())) {
-                throw new UniqueConstraintViolationException(Course.class.getName(), newStudent.getStudentNumber());
+                throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.STUDENTNUMBER.name(), newStudent.getStudentNumber());
             }
             student.setStudentNumber(newStudent.getStudentNumber());
         }
@@ -93,8 +100,7 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    @Override
-    public boolean existsByStudentNumber(String studentNumber) {
+    private boolean existsByStudentNumber(String studentNumber) {
         return studentRepo.existsByStudentNumber(studentNumber);
     }
 

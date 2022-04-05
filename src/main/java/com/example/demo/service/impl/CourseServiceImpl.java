@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.CourseDto;
 import com.example.demo.dto.CreateCourseDto;
+import com.example.demo.dto.UpdateCourseDto;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.UniqueConstraintViolationException;
 import com.example.demo.model.Course;
@@ -9,6 +10,7 @@ import com.example.demo.model.Faculty;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.FacultyRepository;
 import com.example.demo.service.CourseService;
+import com.example.demo.util.ErrorCode;
 import com.example.demo.util.Mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,11 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Long createCourse(CreateCourseDto request) {
+
+        if (this.existsByName(request.getName())) {
+            throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.NAME.name(), request.getName());
+        }
+
         // It'll always exist in db
         Faculty faculty = facultyRepo.findById(request.getFacultyId()).get();
 
@@ -53,7 +60,7 @@ public class CourseServiceImpl implements CourseService {
             List<Predicate> predicates = new ArrayList<>();
 
             if (facultyName != null) {
-                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("faculty").get("facultyName"), "%" + facultyName + "%")));
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("faculty").get("name"), "%" + facultyName + "%")));
             }
             if (name != null) {
                 predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%" + name + "%")));
@@ -70,17 +77,17 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public void updateCourse(Long courseId, CourseDto newData) {
+    public void updateCourse(Long courseId, UpdateCourseDto newData) {
         this.getCourse(courseId)
                 .map(course -> this.update(course, newData))
                 .orElseThrow(() -> new ResourceNotFoundException(Course.class.getName(), courseId.toString()));
     }
 
-    private Course update(Course course, CourseDto newCourse) {
+    private Course update(Course course, UpdateCourseDto newCourse) {
         if (newCourse.getName() != null) {
 
             if (this.existsByName(newCourse.getName())) {
-                throw new UniqueConstraintViolationException(Course.class.getName(), newCourse.getName());
+                throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.NAME.name(), newCourse.getName());
             }
             course.setName(newCourse.getName());
         }
@@ -93,8 +100,7 @@ public class CourseServiceImpl implements CourseService {
         return course;
     }
 
-    @Override
-    public boolean existsByName(String name) {
+    private boolean existsByName(String name) {
        return courseRepo.existsByName(name);
     }
 
