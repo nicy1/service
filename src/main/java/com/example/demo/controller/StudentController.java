@@ -83,7 +83,7 @@ public class StudentController {
                                                         @RequestParam(required = false, defaultValue = "0") Integer offset,
                                                         @RequestParam(required = false, defaultValue = "10") Integer limit) {
 
-        Page<Student> studentsPage = studentService.getStudents(lastName, firstName, gender, PageRequest.of(offset, limit));
+        Page<Student> studentsPage = studentService.getStudents(courseId, lastName, firstName, gender, PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(studentsPage.map(mapper::map));
     }
 

@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.CreateStudentDto;
-import com.example.demo.dto.StudentDto;
 import com.example.demo.dto.UpdateStudentDto;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.UniqueConstraintViolationException;
@@ -54,10 +53,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Page<Student> getStudents(String lastName, String firstName, String gender, Pageable page) {
+    public Page<Student> getStudents(Long courseId, String lastName, String firstName, String gender, Pageable page) {
 
         return studentRepo.findAll((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("course").get("id"), courseId)));
 
             if (lastName != null) {
                 predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("lastName"), "%" + lastName + "%")));
