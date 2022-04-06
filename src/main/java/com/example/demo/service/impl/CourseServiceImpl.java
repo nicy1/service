@@ -97,6 +97,8 @@ public class CourseServiceImpl implements CourseService {
         if (newCourse.getStartDate() != null) {
             course.setStartDate(newCourse.getStartDate());
         }
+
+        facultyRepo.findById(newCourse.getFacultyId()).ifPresent(course::setFaculty);
         return course;
     }
 

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateStudentDto {
 
+    private Long courseId;
     private String lastName;
     private String firstName;
     private String studentNumber;

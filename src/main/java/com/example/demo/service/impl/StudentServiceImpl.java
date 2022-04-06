@@ -97,7 +97,13 @@ public class StudentServiceImpl implements StudentService {
         if (newStudent.getGender() != null) {
             student.setGender(newStudent.getGender());
         }
-        return student;
+
+        return courseRepo.findById(newStudent.getCourseId())
+                .map(c -> {
+                    student.setCourse(c);
+                    return student;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException(Course.class.getName(), newStudent.getCourseId().toString()));
     }
 
     private boolean existsByStudentNumber(String studentNumber) {
