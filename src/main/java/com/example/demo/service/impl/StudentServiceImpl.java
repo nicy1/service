@@ -81,7 +81,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private Student update(Student student, UpdateStudentDto newStudent) {
-        if (newStudent.getStudentNumber() != null) {
+        if (newStudent.getStudentNumber() != null &&
+                !student.getStudentNumber().equalsIgnoreCase(newStudent.getStudentNumber())) {
 
             if (this.existsByStudentNumber(newStudent.getStudentNumber())) {
                 throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.STUDENTNUMBER.name(), newStudent.getStudentNumber());

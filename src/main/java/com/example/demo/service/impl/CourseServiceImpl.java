@@ -84,7 +84,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private Course update(Course course, UpdateCourseDto newCourse) {
-        if (newCourse.getName() != null) {
+        if (newCourse.getName() != null && !course.getName().equalsIgnoreCase(newCourse.getName())) {
 
             if (this.existsByName(newCourse.getName())) {
                 throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.NAME.name(), newCourse.getName());
