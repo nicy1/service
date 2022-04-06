@@ -99,7 +99,7 @@ public class StudentController {
     )
     public ResponseEntity<Void> updateStudent(@PathVariable("courseId") Long courseId,
                                               @PathVariable("studentId") Long studentId,
-                                              @RequestBody UpdateStudentDto newData) {
+                                              @RequestBody @Valid UpdateStudentDto newData) {
         studentService.updateStudent(studentId, courseId, newData);
         return ResponseEntity.ok().build();
     }

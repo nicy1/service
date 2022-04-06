@@ -14,6 +14,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UpdateStudentDto {
 
+    @NotNull
+    private Long courseId;
+
     @NotEmpty
     private String lastName;
 

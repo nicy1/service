@@ -77,11 +77,11 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public void updateStudent(Long studentId, Long courseId, UpdateStudentDto newData) {
         this.getStudent(studentId)
-                .map(student -> this.update(student, courseId, newData))
+                .map(student -> this.update(student, newData))
                 .orElseThrow(() -> new ResourceNotFoundException(Student.class.getName(), studentId.toString()));
     }
 
-    private Student update(Student student, Long courseId, UpdateStudentDto newStudent) {
+    private Student update(Student student, UpdateStudentDto newStudent) {
         if (!student.getStudentNumber().equalsIgnoreCase(newStudent.getStudentNumber())) {
 
             if (this.existsByStudentNumber(newStudent.getStudentNumber())) {
@@ -98,8 +98,8 @@ public class StudentServiceImpl implements StudentService {
         if (!student.getGender().equalsIgnoreCase(newStudent.getGender())) {
             student.setGender(newStudent.getGender());
         }
-        if (!student.getCourse().getId().equals(courseId)) {
-            courseRepo.findById(courseId).ifPresent(student::setCourse);
+        if (!student.getCourse().getId().equals(newStudent.getCourseId())) {
+            courseRepo.findById(newStudent.getCourseId()).ifPresent(student::setCourse);
         }
 
         return student;
