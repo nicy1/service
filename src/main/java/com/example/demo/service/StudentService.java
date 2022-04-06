@@ -13,6 +13,6 @@ public interface StudentService {
     Long createStudent(Long courseId, CreateStudentDto request);
     Optional<Student> getStudent(Long id);
     Page<Student> getStudents(Long courseId, String lastName, String firstName, String gender, Pageable page);
-    void updateStudent(Long studentId, UpdateStudentDto newData);
+    void updateStudent(Long studentId, Long courseId, UpdateStudentDto newData);
     void deleteStudent(Long id);
 }
