@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.CourseDto;
 import com.example.demo.dto.CreateCourseDto;
 import com.example.demo.dto.UpdateCourseDto;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -84,21 +83,23 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private Course update(Course course, UpdateCourseDto newCourse) {
-        if (newCourse.getName() != null && !course.getName().equalsIgnoreCase(newCourse.getName())) {
+        if (!course.getName().equalsIgnoreCase(newCourse.getName())) {
 
             if (this.existsByName(newCourse.getName())) {
                 throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.NAME.name(), newCourse.getName());
             }
             course.setName(newCourse.getName());
         }
-        if (newCourse.getProfessorName() != null) {
+        if (!course.getProfessor().equalsIgnoreCase(newCourse.getProfessorName())) {
             course.setProfessor(newCourse.getProfessorName());
         }
-        if (newCourse.getStartDate() != null) {
+        if (course.getStartDate() != newCourse.getStartDate()) {
             course.setStartDate(newCourse.getStartDate());
         }
+        if (!course.getFaculty().getId().equals(newCourse.getFacultyId())) {
+            facultyRepo.findById(newCourse.getFacultyId()).ifPresent(course::setFaculty);
+        }
 
-        facultyRepo.findById(newCourse.getFacultyId()).ifPresent(course::setFaculty);
         return course;
     }
 

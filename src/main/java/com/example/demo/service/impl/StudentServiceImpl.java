@@ -81,30 +81,27 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private Student update(Student student, UpdateStudentDto newStudent) {
-        if (newStudent.getStudentNumber() != null &&
-                !student.getStudentNumber().equalsIgnoreCase(newStudent.getStudentNumber())) {
+        if (!student.getStudentNumber().equalsIgnoreCase(newStudent.getStudentNumber())) {
 
             if (this.existsByStudentNumber(newStudent.getStudentNumber())) {
                 throw new UniqueConstraintViolationException(Course.class.getName(), ErrorCode.STUDENTNUMBER.name(), newStudent.getStudentNumber());
             }
             student.setStudentNumber(newStudent.getStudentNumber());
         }
-        if (newStudent.getLastName() != null) {
+        if (!student.getLastName().equalsIgnoreCase(newStudent.getLastName())) {
             student.setLastName(newStudent.getLastName());
         }
-        if (newStudent.getFirstName() != null) {
+        if (!student.getFirstName().equalsIgnoreCase(newStudent.getFirstName())) {
             student.setFirstName(newStudent.getFirstName());
         }
-        if (newStudent.getGender() != null) {
+        if (!student.getGender().equalsIgnoreCase(newStudent.getGender())) {
             student.setGender(newStudent.getGender());
         }
+        if (!student.getCourse().getId().equals(newStudent.getCourseId())) {
+            courseRepo.findById(newStudent.getCourseId()).ifPresent(student::setCourse);
+        }
 
-        return courseRepo.findById(newStudent.getCourseId())
-                .map(c -> {
-                    student.setCourse(c);
-                    return student;
-                })
-                .orElseThrow(() -> new ResourceNotFoundException(Course.class.getName(), newStudent.getCourseId().toString()));
+        return student;
     }
 
     private boolean existsByStudentNumber(String studentNumber) {

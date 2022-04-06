@@ -1,8 +1,11 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import lombok.experimental.Accessors;
+import com.fasterxml.jackson.annotation.OptBoolean;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,7 +26,7 @@ public class CreateCourseDto {
     @NotEmpty
     private String professorName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @NotNull
+    @JsonFormat(pattern = "dd-MM-yyyy", lenient = OptBoolean.FALSE)
     private Date startDate;
 }

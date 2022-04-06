@@ -1,10 +1,12 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -25,6 +27,7 @@ public class UpdateCourseDto {
     @NotEmpty
     private String professorName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @NotNull
+    @JsonFormat(pattern = "dd-MM-yyyy", lenient = OptBoolean.FALSE)
     private Date startDate;
 }
