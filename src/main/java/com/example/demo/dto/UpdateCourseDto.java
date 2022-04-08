@@ -18,8 +18,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class UpdateCourseDto {
 
-    @NotNull
-    private Long facultyId;
+  /*  @NotNull
+    private Long facultyId; */
 
     @NotEmpty
     private String name;
