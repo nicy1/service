@@ -12,21 +12,20 @@ spring:
       enabled: always
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/service_demo?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-    username: root
-    password: root
-
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create-drop
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-
-    properties:
+    url: jdbc:h2:mem:university-service;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    username: username
+    password: password
+    driverClassName: org.h2.Driver
+    jpa:
+      generate-ddl: true
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
+        ddl-auto: none
+      open-in-view: true
+      database-platform: org.hibernate.dialect.H2Dialect
+      defer-datasource-initialization: false
+    h2:
+      console:
+        enabled: true
 
 
 springdoc:
