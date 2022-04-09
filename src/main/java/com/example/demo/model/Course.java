@@ -31,7 +31,7 @@ public class Course {
     /// @MapsId: important in case of @OneToOne (Uniqueness management)
     private Faculty faculty;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Student> students;
 
     @Column(nullable = false)
