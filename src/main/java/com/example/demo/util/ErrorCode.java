@@ -17,7 +17,6 @@ public enum ErrorCode {
     PROFESSORNAME(107),
     STARTDATE(108),
     STUDENTNUMBER(109),
-    SERVER_ERROR(110),
     RESOURCE_NOT_FOUND(111);
 
     private final int code;
