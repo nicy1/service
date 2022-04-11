@@ -47,8 +47,8 @@ class CourseServiceImplTest {
 
     @Test
     void createCourse() {
-        given(courseRepoMock.existsByName("Network")).willReturn(false);
-   /*     given(facultyRepoMock.findById(1L)).willReturn(document);
+   /*     given(courseRepoMock.existsByName("Network")).willReturn(false);
+        given(facultyRepoMock.findById(1L)).willReturn(document);
 
        given(passwordEncoderMock.encode(anyString())).willReturn(credentials.getPassword());
 
